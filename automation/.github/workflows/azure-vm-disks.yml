@@ -1,0 +1,24 @@
+name: Check Azure VM Disks
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  run-script:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Azure PowerShell
+        run: Install-Module -Name Az -Force -AllowClobber
+
+      - name: Run PowerShell Script
+        run: |
+          pwsh ./scripts/check-vm-disks.ps1
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_SECRET: ${{ secrets.AZURE_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
