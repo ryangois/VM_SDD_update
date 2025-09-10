@@ -1,0 +1,21 @@
+trigger:
+  - main
+
+schedules:
+  - cron: "0 3 * * *"
+    displayName: Daily Run
+    branches:
+      include:
+        - main
+    always: true
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+  - task: AzurePowerShell@5
+    inputs:
+      azureSubscription: 'NomeDaConexaoDeServico'
+      ScriptType: 'FilePath'
+      ScriptPath: 'scripts/check-vm-disks.ps1'
+      azurePowerShellVersion: 'LatestVersion'
